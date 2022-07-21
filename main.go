@@ -51,10 +51,10 @@ func getIssues(client *jira.Client, jql string) ([]jira.Issue, error) {
 
 	// lastIssue is the index of the last issue returned
 	lastIssue := 0
-	// Make a loop through amount of issues
+	// 결과 리턴할 이슈 슬라이스
 	var result []jira.Issue
 	for {
-		// Add a Search option which accepts maximum amount (1000)
+		// 조회를 위한 추가 옵션
 		opt := &jira.SearchOptions{
 			MaxResults: 1000,      // Max amount
 			StartAt:    lastIssue, // Make sure we start grabbing issues from last checkpoint
@@ -66,7 +66,7 @@ func getIssues(client *jira.Client, jql string) ([]jira.Issue, error) {
 		// Grab total amount from response
 		total := resp.Total
 		if issues == nil {
-			// init the issues array with the correct amount of length
+			// total 값으로 슬라이스 용량 설정
 			result = make([]jira.Issue, 0, total)
 		}
 
