@@ -171,5 +171,6 @@ fabric.properties
 .idea/**/azureSettings.xml
 
 .env
+.idea
 
 # End of https://www.toptal.com/developers/gitignore/api/go,webstorm,osx
