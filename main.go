@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/andygrunwald/go-jira"
 	"github.com/joho/godotenv"
 	"log"
@@ -8,6 +9,7 @@ import (
 )
 
 func main() {
+	// Load 환경변수
 	godotenv.Load(".env")
 
 	tp := jira.BasicAuthTransport{
@@ -15,6 +17,7 @@ func main() {
 		Password: os.Getenv("JIRA_TOKEN"),
 	}
 
+	// jira client 생성
 	client, err := jira.NewClient(tp.Client(), os.Getenv("JIRA_URL"))
 	if err != nil {
 		log.Fatalln(err)
@@ -22,8 +25,22 @@ func main() {
 
 	me, _, err := client.User.GetSelf()
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalln("getSelf")
 	}
 
 	log.Println(me)
+
+	getProjects(client)
+}
+
+// 모든 프로젝트 목록을 가져오는 함수
+func getProjects(client *jira.Client) {
+	projectList, _, err := client.Project.GetList()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	for _, project := range *projectList {
+		fmt.Printf("%s: %s\n", project.Key, project.Name)
+	}
 }
