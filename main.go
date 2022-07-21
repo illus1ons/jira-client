@@ -89,3 +89,16 @@ func getIssues(client *jira.Client, jql string) ([]jira.Issue, error) {
 	}
 	return result, nil
 }
+
+func getIssueTransition(client *jira.Client, issue jira.Issue, status string) (jira.Transition, error) {
+	transitions, _, err := client.Issue.GetTransitions(issue.Key)
+	if err != nil {
+		return jira.Transition{}, err
+	}
+	for _, t := range transitions {
+		if t.Name == status {
+			return t, nil
+		}
+	}
+	return jira.Transition{}, nil
+}
